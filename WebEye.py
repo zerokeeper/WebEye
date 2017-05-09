@@ -21,7 +21,7 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 tasks = Queue()
 
 
-class Whatweb(Greenlet):
+class WebEye(Greenlet):
 
     def __init__(self, url):
         Greenlet.__init__(self)
@@ -113,7 +113,7 @@ def main():
                       help='The url of target.')
     (options, args) = parser.parse_args()
     if options.url:
-        res = Whatweb(options.url)
+        res = WebEye(options.url)
         res.run()
         cms = list(res.cms_list)
         print cms
