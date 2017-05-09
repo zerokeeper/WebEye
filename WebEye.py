@@ -20,7 +20,7 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 tasks = Queue()
 
-
+##
 class WebEye(Greenlet):
 
     def __init__(self, url):
