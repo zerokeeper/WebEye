@@ -8,10 +8,10 @@ Langeuage:asp|headers|Set-Cookie|ASPSESSION
 Langeuage:aspx|headers|Set-Cookie|ASP.NET_SessionId
 Langeuage:aspx|headers|X-AspNet-Version|version
 Langeuage:aspx|index|index|<input[^>]+name=\"__VIEWSTATE
-Langeuage:aspx|index|index|<a[^>]*?href=('|")[^http].*?\.aspx(\?|\1)
-Langeuage:asp|index|index|<a[^>]*?href=('|")[^http].*?\.asp(\?|\1)
-Langeuage:php|index|index|<a[^>]*?href=('|")[^http].*?\.php(\?|\1)
-Langeuage:jsp|index|index|<a[^>]*?href=('|")[^http].*?\.jsp(\?|\1)
+Langeuage:aspx|index|index|<a[^>]*?href=('|")[^http][^>]*?\.aspx(\?|\#|\1)
+Langeuage:asp|index|index|<a[^>]*?href=('|")[^http][^>]*?\.asp(\?|\#|\1)
+Langeuage:php|index|index|<a[^>]*?href=('|")[^http][^>]*?\.php(\?|\#|\1)
+Langeuage:jsp|index|index|<a[^>]*?href=('|")[^http][^>]*?\.jsp(\?|\#|\1)
 
 [CMS]
 CMS:discuz|index|index|<meta name=\"generator\" content=\"Discuz!|<script src=\".*?logging\\.js
