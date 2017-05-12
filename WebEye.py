@@ -9,10 +9,13 @@ import gevent
 from gevent.queue import Queue
 import os
 import requests
+import socket
+import pythonwhois
 import sys
 import re
 import time
 import optparse
+import urlparse
 
 sys.setrecursionlimit(10000)
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
@@ -35,7 +38,7 @@ class WebEye(Greenlet):
             self.content = r.content
             gevent.spawn(self.read_config).join()
             gevent.joinall([
-                gevent.spawn(self.discern, '1'),
+                gevent.spawn(self.get_whois, '1'),
                 gevent.spawn(self.discern, '2'),
                 gevent.spawn(self.discern, '3'),
                 gevent.spawn(self.discern, '4'),
@@ -45,6 +48,7 @@ class WebEye(Greenlet):
                 gevent.spawn(self.discern, '8'),
                 gevent.spawn(self.discern, '9'),
                 gevent.spawn(self.discern, '10'),
+                gevent.spawn(self.discern, '11'),
             ])
         except Exception, e:
             print e
@@ -104,6 +108,46 @@ class WebEye(Greenlet):
         except Exception as e:
             # print e
             pass
+
+    def get_whois(self,name):
+        try:
+            domain = urlparse.urlparse(self.target).netloc
+
+            # if domain is ip,stop querying domain.
+            result = re.search("\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}",domain)
+            if result:
+                return
+
+            # get domain's ip
+            try:
+                ip = socket.gethostbyname(domain)
+                self.cms_list.add("IP:"+ip)
+            except Exception,e:
+                # print e
+                pass
+
+            if re.match("^www\.",domain):
+                domain = domain.strip("www.") 
+            who = pythonwhois.get_whois(domain)
+
+            # get whois
+            if who["contacts"]["registrant"]["name"] is not None:
+                self.cms_list.add("Domain_User:"+who["contacts"]["registrant"]["name"].encode("utf8"))
+            if who["contacts"]["registrant"]["email"] is not None:
+                self.cms_list.add("Domain_Email:"+who["contacts"]["registrant"]["email"].encode("utf8"))
+            if who["contacts"]["registrant"]["phone"] is not None:
+                self.cms_list.add("Domain_Phone:"+who["contacts"]["registrant"]["phone"].encode("utf8"))
+            if who["registrar"] is not None:
+                self.cms_list.add("Domain_Registrar:"+who["registrar"][0].encode("utf8"))
+            if who["nameservers"] is not None:
+                name_servers=[]
+                for i in who["nameservers"]:
+                    name_servers.append(i.encode('UTF8'))
+                self.cms_list.add("Domai_name_servers:"+str(name_servers).encode("utf8"))
+        except Exception,e:
+            # print e
+            pass
+
 
 
 def main():
