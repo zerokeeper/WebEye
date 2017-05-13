@@ -114,10 +114,14 @@ class WebEye(Greenlet):
             domain = urlparse.urlparse(self.target).netloc
 
             # if domain is ip,stop querying domain.
-            result = re.search("\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}",domain)
-            if result:
+            result1 = re.search("\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}",domain)
+            if result1:
                 return
-
+            # remove port
+            result2 = re.search("\:\d{1,5}$",domain)
+            if result2:
+            	domain = domain.split(":")[0]
+            	
             # get domain's ip
             try:
                 ip = socket.gethostbyname(domain)
