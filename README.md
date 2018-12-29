@@ -15,4 +15,4 @@
 
 主要是使用异步实现指纹的快速识别。脚本虽然简单，但是前前后后，指纹的收集制作却花费了我大量时间。
 
-![](http://ocnf2x3pk.bkt.clouddn.com/WebEye.png)
+![](https://static-1257872780.cos.ap-shanghai.myqcloud.com/WebEye.png)
